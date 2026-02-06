@@ -1,10 +1,10 @@
-# 🎵 MixMatch - Professional Audio Mastering
+# MixMatch - Professional Audio Mastering
 
 MixMatch is a modern web application that automatically masters your audio tracks to match professional reference tracks. Built with React, FastAPI, and the powerful Matchering library.
 
 ![MixMatch](https://img.shields.io/badge/React-18.2-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green) ![Python](https://img.shields.io/badge/Python-3.8+-yellow)
 
-## ✨ Features
+## Features
 
 - **Drag & Drop Upload**: Intuitive file upload for target and reference tracks
 - **Automated Mastering**: Uses the Matchering library for professional audio processing
@@ -14,7 +14,7 @@ MixMatch is a modern web application that automatically masters your audio track
 - **One-Click Download**: Export your mastered track instantly
 - **Dark Mode UI**: Clean, modern interface with Deep Grey (#1a1a1b) and Vibrant Purple (#8b5cf6)
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React.js** - Modern UI library
@@ -29,7 +29,7 @@ MixMatch is a modern web application that automatically masters your audio track
 - **librosa** - Audio analysis and visualization
 - **Uvicorn** - ASGI server
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Node.js** (v16 or higher)
 - **Python** (3.8 or higher)
@@ -52,7 +52,7 @@ sudo apt-get install ffmpeg
 **Windows:**
 Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add to PATH.
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### 1. Clone the Repository
 ```bash
@@ -91,7 +91,7 @@ cd frontend
 npm install
 ```
 
-## 🎬 Running the Application
+## Running the Application
 
 ### Start the Backend (Terminal 1)
 
@@ -120,7 +120,7 @@ The frontend will start on `http://localhost:5173`
 
 Open your browser and navigate to `http://localhost:5173`
 
-## 📖 Usage
+## Usage
 
 1. **Upload Files**
    - Drag & drop or click to select your **Target Track** (unmixed audio)
@@ -142,7 +142,7 @@ Open your browser and navigate to `http://localhost:5173`
 5. **Master Another Track**
    - Click "Master Another Track" to start over
 
-## 🎵 Supported Audio Formats
+## Supported Audio Formats
 
 - **MP3** (.mp3)
 - **WAV** (.wav)
@@ -150,36 +150,7 @@ Open your browser and navigate to `http://localhost:5173`
 - **OGG** (.ogg)
 - **M4A** (.m4a)
 
-## 🏗️ Project Structure
-
-```
-MixMatch/
-├── backend/
-│   ├── main.py                 # FastAPI application
-│   ├── audio_processor.py      # Audio processing logic
-│   ├── requirements.txt        # Python dependencies
-│   ├── uploads/               # Temporary upload directory
-│   └── processed/             # Processed files directory
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx            # Main application component
-│   │   ├── main.jsx           # Entry point
-│   │   ├── index.css          # Global styles
-│   │   └── components/
-│   │       ├── FileDropzone.jsx        # File upload component
-│   │       ├── AudioPlayer.jsx         # Audio playback component
-│   │       ├── ProgressBar.jsx         # Progress indicator
-│   │       └── WaveformVisualizer.jsx  # Waveform display
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── postcss.config.js
-├── LICENSE
-└── README.md
-```
-
-## 🔧 Configuration
+## Config
 
 ### Backend Configuration
 
@@ -193,7 +164,7 @@ Edit `backend/main.py` to modify:
 Edit `frontend/src/App.jsx` to modify:
 - **API URL**: Change `API_BASE_URL` constant
 
-## 🎨 Customization
+## Customization
 
 ### Theme Colors
 
@@ -208,13 +179,13 @@ colors: {
 
 Modify these values to customize the theme.
 
-## 📝 API Documentation
+## API Documentation
 
 Once the backend is running, visit:
 - **Swagger UI**: `http://localhost:8000/docs`
 - **ReDoc**: `http://localhost:8000/redoc`
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Backend Issues
 
@@ -245,15 +216,15 @@ npm install
 - Vite will automatically try the next available port
 - Or manually kill the process using port 5173
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## cknowledgments
 
 - [Matchering](https://github.com/sergree/matchering) - Audio mastering library
 - [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
@@ -261,7 +232,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
 - [librosa](https://librosa.org/) - Audio analysis library
 
-## 📧 Support
+## Support
 
 For issues and questions, please open an issue on the GitHub repository.
 

@@ -17,7 +17,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://localhost:3000",
-        "https://scripty2k.github.io"
+        "https://scripty2k.github.io",
+        "https://scripty2k.github.io/MixMatch"
     ],
     allow_credentials=True,
     allow_methods=["*"],

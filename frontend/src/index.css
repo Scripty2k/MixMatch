@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #1a1a1b;
+  color: #ffffff;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Subtle purple glow effects */
+@layer utilities {
+  .glow-purple-sm {
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.15);
+  }
+  
+  .glow-purple-md {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+  }
+  
+  .glow-purple-lg {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+  }
+
+  .hover-glow-purple {
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .hover-glow-purple:hover {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+}

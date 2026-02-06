@@ -1,0 +1,17 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+uploads/*
+!uploads/.gitkeep
+processed/*
+!processed/.gitkeep
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+.env
+.DS_Store

@@ -1,6 +1,7 @@
 # MixMatch - Professional Audio Mastering
 
 MixMatch is a modern web application that automatically masters your audio tracks to match professional reference tracks. Built with React, FastAPI, and the powerful Matchering library.
+https://scripty2k.github.io/MixMatch/
 
 ![MixMatch](https://img.shields.io/badge/React-18.2-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green) ![Python](https://img.shields.io/badge/Python-3.8+-yellow)
 

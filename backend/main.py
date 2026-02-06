@@ -10,10 +10,14 @@ import shutil
 
 app = FastAPI(title="MixMatch API")
 
-# Configure CORS for local development
+# Configure CORS for local development and production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://scripty2k.github.io"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

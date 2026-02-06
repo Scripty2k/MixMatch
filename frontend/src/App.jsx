@@ -5,7 +5,7 @@ import ProgressBar from './components/ProgressBar';
 import AudioPlayer from './components/AudioPlayer';
 import WaveformVisualizer from './components/WaveformVisualizer';
 
-const API_BASE_URL = 'https://mixmatch-api-5gkh.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
   const [targetFile, setTargetFile] = useState(null);
@@ -18,6 +18,7 @@ function App() {
   const [waveformData, setWaveformData] = useState(null);
   const [error, setError] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Poll for job status
   useEffect(() => {
@@ -53,10 +54,20 @@ function App() {
       return;
     }
 
+    // Check file sizes (warn if very large)
+    const totalSize = targetFile.size + referenceFile.size;
+    const totalSizeMB = totalSize / (1024 * 1024);
+    
+    if (totalSizeMB > 100) {
+      setError(`Files are very large (${totalSizeMB.toFixed(1)}MB). This may take several minutes to upload.`);
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
     setError(null);
     setIsProcessing(true);
-    setStatus('queued');
+    setStatus('uploading');
     setProgress(0);
+    setUploadProgress(0);
 
     // Create object URL for original file
     const originalUrl = URL.createObjectURL(targetFile);
@@ -71,13 +82,37 @@ function App() {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        timeout: 300000, // 5 minutes timeout for upload
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percentCompleted);
+          if (percentCompleted < 100) {
+            setStatus('uploading');
+          }
+        },
       });
 
+      setUploadProgress(100);
+      setStatus('queued');
       setJobId(response.data.job_id);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to start processing');
+      console.error('Upload error:', err);
+      let errorMessage = 'Failed to start processing';
+      
+      if (err.code === 'ECONNABORTED') {
+        errorMessage = 'Upload timed out. Files may be too large or connection is slow.';
+      } else if (err.code === 'ERR_NETWORK') {
+        errorMessage = 'Network error. Please check your connection and try again.';
+      } else if (err.response?.status === 413) {
+        errorMessage = 'Files are too large. Please use smaller audio files.';
+      } else if (err.response?.data?.detail) {
+        errorMessage = err.response.data.detail;
+      }
+      
+      setError(errorMessage);
       setIsProcessing(false);
       setStatus(null);
+      setUploadProgress(0);
     }
   };
 
@@ -108,6 +143,7 @@ function App() {
     setWaveformData(null);
     setError(null);
     setIsProcessing(false);
+    setUploadProgress(0);
   };
 
   return (
@@ -185,7 +221,7 @@ function App() {
               {/* Progress Bar */}
               {isProcessing && (
                 <div className="mb-6">
-                  <ProgressBar progress={progress} status={status} />
+                  <ProgressBar progress={progress} status={status} uploadProgress={uploadProgress} />
                 </div>
               )}
 

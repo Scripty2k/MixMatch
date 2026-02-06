@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import os
 import uuid
+import hashlib
 from pathlib import Path
 from audio_processor import process_audio, generate_waveform_data
 import shutil
@@ -22,6 +23,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Maximum file size: 100MB
+MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB in bytes
 
 # Create necessary directories
 UPLOAD_DIR = Path("uploads")
@@ -107,12 +111,68 @@ async def mix_audio(
     reference_path = UPLOAD_DIR / reference_filename
     output_path = PROCESSED_DIR / output_filename
     
-    # Save uploaded files
-    with open(target_path, "wb") as buffer:
-        shutil.copyfileobj(target.file, buffer)
-    
-    with open(reference_path, "wb") as buffer:
-        shutil.copyfileobj(reference.file, buffer)
+    # Save uploaded files with size validation
+    try:
+        # Save target file and compute hash
+        target_size = 0
+        target_hash = hashlib.md5()
+        with open(target_path, "wb") as buffer:
+            while True:
+                chunk = await target.read(8192)  # Read in 8KB chunks
+                if not chunk:
+                    break
+                target_size += len(chunk)
+                target_hash.update(chunk)
+                if target_size > MAX_FILE_SIZE:
+                    os.remove(target_path)
+                    raise HTTPException(
+                        status_code=413,
+                        detail=f"Target file too large. Maximum size: {MAX_FILE_SIZE // (1024*1024)}MB"
+                    )
+                buffer.write(chunk)
+        
+        # Save reference file and compute hash
+        reference_size = 0
+        reference_hash = hashlib.md5()
+        with open(reference_path, "wb") as buffer:
+            while True:
+                chunk = await reference.read(8192)  # Read in 8KB chunks
+                if not chunk:
+                    break
+                reference_size += len(chunk)
+                reference_hash.update(chunk)
+                if reference_size > MAX_FILE_SIZE:
+                    os.remove(target_path)
+                    os.remove(reference_path)
+                    raise HTTPException(
+                        status_code=413,
+                        detail=f"Reference file too large. Maximum size: {MAX_FILE_SIZE // (1024*1024)}MB"
+                    )
+                buffer.write(chunk)
+        
+        # Verify files are different
+        target_digest = target_hash.hexdigest()
+        reference_digest = reference_hash.hexdigest()
+        
+        print(f"File hashes - Target: {target_digest}, Reference: {reference_digest}")
+        print(f"File sizes - Target: {target_size} bytes, Reference: {reference_size} bytes")
+        
+        if target_digest == reference_digest:
+            os.remove(target_path)
+            os.remove(reference_path)
+            raise HTTPException(
+                status_code=400,
+                detail="Target and reference files are identical. Please upload two different audio files."
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        # Clean up any partially saved files
+        if target_path.exists():
+            os.remove(target_path)
+        if reference_path.exists():
+            os.remove(reference_path)
+        raise HTTPException(status_code=500, detail=f"Error saving files: {str(e)}")
     
     # Initialize job status
     job_status[job_id] = {"status": "queued", "progress": 0}

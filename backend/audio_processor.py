@@ -2,6 +2,7 @@ import matchering as mg
 import librosa
 import numpy as np
 from typing import List, Dict
+import os
 
 
 def process_audio(target_path: str, reference_path: str, output_path: str):
@@ -13,6 +14,27 @@ def process_audio(target_path: str, reference_path: str, output_path: str):
         reference_path: Path to the reference (professional) audio file
         output_path: Path where the processed audio will be saved
     """
+    # Verify files exist and are different
+    if not os.path.exists(target_path):
+        raise FileNotFoundError(f"Target file not found: {target_path}")
+    if not os.path.exists(reference_path):
+        raise FileNotFoundError(f"Reference file not found: {reference_path}")
+    
+    # Get file sizes for debugging
+    target_size = os.path.getsize(target_path)
+    reference_size = os.path.getsize(reference_path)
+    
+    print(f"Processing audio:")
+    print(f"  Target: {target_path} ({target_size} bytes)")
+    print(f"  Reference: {reference_path} ({reference_size} bytes)")
+    
+    # Verify files are different sizes or content
+    if target_size == reference_size:
+        # Check if content is identical
+        with open(target_path, 'rb') as f1, open(reference_path, 'rb') as f2:
+            if f1.read() == f2.read():
+                raise ValueError("Target and reference files have identical content")
+    
     # Use matchering to process the audio
     # The mg.process function handles all the audio matching magic
     mg.process(

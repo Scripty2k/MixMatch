@@ -5,7 +5,7 @@ import ProgressBar from './components/ProgressBar';
 import AudioPlayer from './components/AudioPlayer';
 import WaveformVisualizer from './components/WaveformVisualizer';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://mixmatch-api-5gkh.onrender.com';
 
 function App() {
   const [targetFile, setTargetFile] = useState(null);
